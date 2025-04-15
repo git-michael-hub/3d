@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 6 - 3D Tiles Loader</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+            color: #fff;
+        }
+        
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+            pointer-events: none;
+        }
+        
+        #title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        #subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #191919, #2c2c2c);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            transition: opacity 0.5s;
+        }
+        
+        #loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .spinner {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .spinner:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 8px solid transparent;
+            border-top-color: #4285F4;
+            border-bottom-color: #4285F4;
+            animation: spin 1.5s linear infinite;
+        }
+        
+        .spinner:after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border-radius: 50%;
+            border: 8px solid transparent;
+            border-left-color: #FFFFFF;
+            border-right-color: #FFFFFF;
+            animation: spin 1s linear infinite reverse;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #loading-text {
+            font-size: 22px;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+        }
+        
+        #loading-progress {
+            font-size: 18px;
+            color: #4285F4;
+        }
+        
+        #controls-info {
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 100;
+            font-size: 14px;
+            line-height: 1.6;
+            border-left: 4px solid #4285F4;
+        }
+        
+        #location-select {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            border-right: 4px solid #4285F4;
+        }
+        
+        #location-select select {
+            margin-left: 10px;
+            background-color: #333;
+            color: white;
+            border: 1px solid #4285F4;
+            padding: 6px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        #location-select select:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px #4285F4;
+        }
+        
+        #fps-counter {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 3px;
+            z-index: 100;
+            font-family: monospace;
+            font-size: 14px;
+            border-right: 2px solid #4285F4;
+        }
+        
+        #stats-container {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            z-index: 100;
+        }
+        
+        #attribution {
+            position: fixed;
+            bottom: 40px;
+            right: 10px;
+            font-size: 12px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 3px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <div id="title">3D Tiles Loader</div>
+        <div id="subtitle">Explore 3D Photorealistic Tiles</div>
+    </div>
+
+    <div id="loading">
+        <div class="spinner"></div>
+        <div id="loading-text">Loading 3D Tiles</div>
+        <div id="loading-progress">0%</div>
+    </div>
+
+    <div id="controls-info">
+        <div>Mouse: Rotate view</div>
+        <div>Left-click + drag: Rotate</div>
+        <div>Right-click + drag: Pan</div>
+        <div>Scroll: Zoom in/out</div>
+        <div>R: Reset camera</div>
+    </div>
+
+    <div id="location-select">
+        <label for="locations">Location:</label>
+        <select id="locations" name="locations">
+            <option value="google">Google Photorealistic</option>
+            <option value="nyc">New York City</option>
+            <option value="sf">San Francisco</option>
+            <option value="seattle">Seattle</option>
+        </select>
+    </div>
+
+    <div id="fps-counter">FPS: 0</div>
+    <div id="stats-container"></div>
+    
+    <div id="attribution">3D Tiles provided by Google Photorealistic Tiles courtesy of Cesium Ion</div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script src="js/3d-tiles-loader.js" type="module"></script>
+</body>
+</html> 

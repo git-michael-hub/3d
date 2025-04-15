@@ -1,0 +1,20 @@
+{
+  "name": "image-reanimation-three-js",
+  "version": "1.0.0",
+  "description": "Animate static images using Three.js with wave/distortion and particle effects",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "three.js",
+    "animation",
+    "webgl",
+    "image",
+    "particles",
+    "3d"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+} 

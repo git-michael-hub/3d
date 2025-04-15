@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lava Shader Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #loading-spinner {
+            border: 5px solid rgba(255,255,255,0.3);
+            border-top: 5px solid #ff6600;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #title-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        #title {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+            color: #ff6600;
+            text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+        }
+
+        #subtitle {
+            font-size: 14px;
+            margin: 5px 0 0 0;
+            opacity: 0.7;
+        }
+
+        .panel {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            color: #fff;
+            z-index: 100;
+        }
+
+        #controls-panel {
+            top: 20px;
+            right: 20px;
+            width: 250px;
+        }
+
+        .slider-container {
+            margin-bottom: 15px;
+        }
+
+        .slider-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .slider-container input[type="range"] {
+            width: 100%;
+            background: #444;
+            height: 8px;
+            border-radius: 4px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #ff6600;
+            cursor: pointer;
+        }
+
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .toggle-container input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        
+        .select-container {
+            margin-bottom: 15px;
+        }
+        
+        .select-container label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .select-container select {
+            width: 100%;
+            padding: 8px;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .select-container select option {
+            background-color: #333;
+        }
+
+        #fps-counter {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 14px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 4px;
+            z-index: 100;
+        }
+
+        #controls-info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 14px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 4px;
+            z-index: 100;
+        }
+
+        #controls-info p {
+            margin: 5px 0;
+        }
+
+        #controls-info kbd {
+            background-color: #333;
+            border-radius: 4px;
+            padding: 2px 5px;
+            font-family: monospace;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .mode-button {
+            flex: 1;
+            padding: 8px 12px;
+            background-color: #444;
+            color: #fff;
+            border: 1px solid #666;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .mode-button.active {
+            background-color: #007bff;
+            border-color: #0069d9;
+        }
+        
+        .mode-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div id="loading-spinner"></div>
+        <p>Initializing Lava Shader...</p>
+    </div>
+
+    <!-- Title -->
+    <div id="title-container">
+        <h1 id="title">Lava Shader</h1>
+        <p id="subtitle">Interactive Three.js shader demo</p>
+    </div>
+
+    <!-- Controls Panel -->
+    <div id="controls-panel" class="panel">
+        <div class="select-container">
+            <label for="geometry-select">Geometry:</label>
+            <select id="geometry-select">
+                <option value="0">Torus</option>
+                <option value="1">Icosahedron</option>
+                <option value="2">Sphere</option>
+                <option value="3">Cube</option>
+                <option value="4">Teapot</option>
+                <option value="5">Torus Knot</option>
+                <option value="6">Merkaba</option>
+                <option value="7">Flower of Life</option>
+                <option value="8">Metatron's Cube</option>
+                <option value="9">Sri Yantra</option>
+                <option value="10">Dodecahedron</option>
+                <option value="11">Cell</option>
+                <option value="12">Eye</option>
+                <option value="13">Flower of Life Sphere</option>
+            </select>
+        </div>
+        
+        <div class="select-container">
+            <label for="theme-select">Theme:</label>
+            <select id="theme-select">
+                <option value="lava">Lava</option>
+                <option value="toxic">Toxic</option>
+                <option value="ocean">Ocean</option>
+                <option value="moon">Moon</option>
+                <option value="inferno">Inferno</option>
+                <option value="electric">Electric</option>
+                <option value="emerald">Emerald</option>
+                <option value="sunset">Sunset</option>
+                <option value="desert">Desert</option>
+                <option value="arctic">Arctic</option>
+            </select>
+        </div>
+        
+        <div class="slider-container">
+            <label for="flow-speed">Flow Speed: <span id="flow-speed-value">0.5</span></label>
+            <input type="range" id="flow-speed" min="0" max="3" step="0.1" value="0.5">
+        </div>
+        <div class="slider-container">
+            <label for="glow-intensity">Glow Intensity: <span id="glow-intensity-value">1.0</span></label>
+            <input type="range" id="glow-intensity" min="0" max="3" step="0.1" value="1.0">
+        </div>
+        <div class="slider-container">
+            <label for="turbulence">Turbulence: <span id="turbulence-value">1.0</span></label>
+            <input type="range" id="turbulence" min="0" max="3" step="0.1" value="1.0">
+        </div>
+        <div class="select-container">
+            <label>Turbulence Mode:</label>
+            <div class="button-group">
+                <button id="standard-mode" class="mode-button active">Standard</button>
+                <button id="crystal-mode" class="mode-button">Crystal</button>
+                <button id="moon-mode" class="mode-button">Moon</button>
+            </div>
+        </div>
+        <div class="toggle-container">
+            <input type="checkbox" id="auto-rotate">
+            <label for="auto-rotate">Auto-rotate</label>
+        </div>
+        <div class="slider-container">
+            <label for="darkness">Darkness: <span id="darkness-value">0.0</span></label>
+            <input type="range" id="darkness" min="0.0" max="1.0" step="0.05" value="0.0">
+        </div>
+        <div class="slider-container">
+            <label for="exposure">Exposure: <span id="exposure-value">1.0</span></label>
+            <input type="range" id="exposure" min="0.1" max="3.0" step="0.1" value="1.0">
+        </div>
+        <div class="slider-container">
+            <label for="contrast">Contrast: <span id="contrast-value">1.0</span></label>
+            <input type="range" id="contrast" min="0.5" max="2.0" step="0.1" value="1.0">
+        </div>
+        <div class="slider-container">
+            <label for="saturation">Saturation: <span id="saturation-value">1.0</span></label>
+            <input type="range" id="saturation" min="0.0" max="2.0" step="0.1" value="1.0">
+        </div>
+        <div class="slider-container">
+            <label for="sharpness">Sharpness: <span id="sharpness-value">0.0</span></label>
+            <input type="range" id="sharpness" min="0.0" max="5.0" step="0.1" value="0.0">
+        </div>
+        <div class="toggle-container">
+            <input type="checkbox" id="crystal-mode">
+            <label for="crystal-mode">Crystal Mode</label>
+        </div>
+        <div class="slider-container">
+            <label for="crystal-scale">Crystal Scale: <span id="crystal-scale-value">4.0</span></label>
+            <input type="range" id="crystal-scale" min="1" max="10" step="0.5" value="4.0">
+        </div>
+    </div>
+
+    <!-- FPS Counter -->
+    <div id="fps-counter">FPS: 0</div>
+
+    <!-- Controls Info -->
+    <div id="controls-info" class="panel">
+        <p><kbd>Left Click + Drag</kbd> - Rotate view</p>
+        <p><kbd>Mouse Wheel</kbd> - Zoom in/out</p>
+        <p><kbd>Right Click + Drag</kbd> - Pan view</p>
+        <p><kbd>1</kbd> - Standard mode</p>
+        <p><kbd>2</kbd> - Crystal mode</p>
+        <p><kbd>3</kbd> - Moon mode</p>
+        <p><kbd>T</kbd> - Cycle through themes</p>
+        <p><kbd>4-0</kbd> - Select specific themes</p>
+        <p><kbd>R</kbd> - Reset camera</p>
+    </div>
+
+    <!-- Import maps for modules -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <!-- Main script -->
+    <script type="module" src="js/lava-shader.js"></script>
+</body>
+</html> 

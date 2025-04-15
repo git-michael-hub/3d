@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Particle Animation with Three.js</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        .info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            font-family: Arial, sans-serif;
+            z-index: 100;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .fallback {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            background-color: #000;
+            z-index: 100;
+        }
+        .fallback.hidden {
+            display: none;
+        }
+        .fallback h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .fallback p {
+            font-size: 16px;
+            margin-bottom: 20px;
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.5;
+        }
+        .loading {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            padding: 15px;
+            border: 1px solid red;
+            border-radius: 5px;
+            background-color: rgba(255, 0, 0, 0.1);
+            margin-top: 20px;
+            max-width: 80%;
+            text-align: center;
+        }
+        .debug-info {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="fallback" class="fallback">
+        <h1>Image Particle Animation with Three.js</h1>
+        <p>Loading animation... If nothing appears within a few seconds, your browser might not support WebGL or there might be an issue with the application.</p>
+        <div id="loading" class="loading">Loading resources...</div>
+        <div id="error" class="error hidden"></div>
+    </div>
+    
+    <div class="info">
+        <p>3D Image Particle Animation - Drag to rotate view</p>
+    </div>
+    
+    <div id="debug-info" class="debug-info" style="display: none;">
+        <div>Debug Info:</div>
+        <div id="debug-content"></div>
+    </div>
+    
+    <script>
+        // Show debug info
+        function toggleDebug() {
+            const debugInfo = document.getElementById('debug-info');
+            debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Function to show errors
+        function showError(message) {
+            const errorElement = document.getElementById('error');
+            errorElement.textContent = message;
+            errorElement.classList.remove('hidden');
+            document.getElementById('loading').classList.add('hidden');
+        }
+        
+        // Function to update debug info
+        function updateDebugInfo() {
+            const debugContent = document.getElementById('debug-content');
+            if (debugContent) {
+                debugContent.innerHTML = 
+                    'Screen Size: ' + window.innerWidth + 'x' + window.innerHeight + '<br>' +
+                    'User Agent: ' + navigator.userAgent.substring(0, 50) + '...<br>' +
+                    'WebGL Enabled: ' + (!!window.WebGLRenderingContext && !!document.createElement('canvas').getContext('webgl')) + '<br>' +
+                    'Time: ' + new Date().toLocaleTimeString();
+            }
+            setTimeout(updateDebugInfo, 1000);
+        }
+        
+        // Add keyboard shortcut for debug
+        document.addEventListener('keydown', function(event) {
+            // Press D key to toggle debug info
+            if (event.key === 'd' || event.key === 'D') {
+                toggleDebug();
+            }
+        });
+        
+        // Start updating debug info
+        updateDebugInfo();
+        
+        // Add window error handling
+        window.addEventListener('error', function(event) {
+            showError('JavaScript Error: ' + event.message);
+            console.error('Error:', event.message);
+            return false;
+        });
+    </script>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    
+    <script type="module">
+        // Hide fallback when Three.js is loaded
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                // Hide fallback screen after a moment to allow canvas to render
+                const fallback = document.getElementById('fallback');
+                if (fallback) {
+                    fallback.classList.add('hidden');
+                }
+            }, 1000);
+        });
+    </script>
+    
+    <script type="module" src="./js/particle-effect.js"></script>
+</body>
+</html> 
