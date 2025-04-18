@@ -1,18 +1,19 @@
 {
-  "name": "image-reanimation-three-js",
+  "name": "3d-solar-system",
   "version": "1.0.0",
-  "description": "Animate static images using Three.js with wave/distortion and particle effects",
+  "description": "3D Solar System visualization using Three.js with realistic models, textures, and physics",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "keywords": [
     "three.js",
-    "animation",
+    "3d",
+    "solar-system",
     "webgl",
-    "image",
-    "particles",
-    "3d"
+    "astronomy",
+    "planets",
+    "education"
   ],
   "author": "",
   "license": "MIT",

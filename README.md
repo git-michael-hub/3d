@@ -1,102 +1,90 @@
-# 3D Interactive Demos
+# 3D Solar System
 
-A collection of interactive Three.js demos for web browsers.
+A dynamic and interactive simulation of our solar system created using THREE.js.
 
-**View the project on GitHub: [https://github.com/git-michael-hub/3d](https://github.com/git-michael-hub/3d)**
+## Features
 
-## Quick Navigation
-- [Wave Effect (index.html)](#wave-effect)
-- [Particle Effect (particle-animation.html)](#particle-effect)
-- [3D Image Gallery (image-gallery.html)](#3d-image-gallery)
-- [3D Sports Car (3d-sportscar.html)](#3d-sports-car)
-- [3D Jeep (3d-jeep.html)](#3d-jeep)
-- [Keyframe Animation (keyframe-animation.html)](#keyframe-animation)
-- [Project 3 Animation (project3-animation.html)](#project-3-animation)
-- [Tokyo Animation (tokyo-animation.html)](#tokyo-animation)
-- [Philippines Animation (philippines-animation.html)](#philippines-animation)
-- [3D Tiles Loader (3d-tiles-loader.html)](#3d-tiles-loader)
-- [Car Materials (car-materials.html)](#car-materials)
-- [Lava Shader (lava-shader.html)](#lava-shader)
+### Standard Setup
+* Scene, Camera, Renderer for 3D visualization
+* Interactive controls for navigating the 3D space
+* Efficient texture loading and management
 
-## Live Demo Links
-When the server is running at http://localhost:3000, you can access the demos with these links:
+### Postprocessing Effects
+* BloomPass for the Sun's glow
+* OutlinePass for highlighting planets on hover
+* EffectComposer for managing all effects
 
-1. [🌊 Wave Effect](http://localhost:3000/index.html)
-2. [✨ Particle Effect](http://localhost:3000/particle-animation.html)
-3. [🖼️ 3D Image Gallery](http://localhost:3000/image-gallery.html)
-4. [🏎️ 3D Sports Car](http://localhost:3000/3d-sportscar.html)
-5. [🚙 3D Jeep](http://localhost:3000/3d-jeep.html)
-6. [🎬 Keyframe Animation](http://localhost:3000/keyframe-animation.html)
-7. [🌟 Project 3 Animation](http://localhost:3000/project3-animation.html)
-8. [🗼 Tokyo Animation](http://localhost:3000/tokyo-animation.html)
-9. [🇵🇭 Philippines Animation](http://localhost:3000/philippines-animation.html)
-10. [🗺️ 3D Tiles Loader](http://localhost:3000/3d-tiles-loader.html)
-11. [🚗 Car Materials](http://localhost:3000/car-materials.html)
-12. [🌋 Lava Shader](http://localhost:3000/lava-shader.html)
+### Star Background
+* Realistic starry sky with thousands of stars
+* Random positions and subtle color variations
 
-## Available Demos
+### Interactive Controls
+* Orbit around the solar system
+* Zoom in/out to explore planets
+* Click on planets to get detailed information
 
-1. 🌊 <span id="wave-effect">**Wave Effect**</span> - Interactive wave animation effect (index.html)
-2. ✨ <span id="particle-effect">**Particle Effect**</span> - Dynamic particle system animation (particle-animation.html)
-3. 🖼️ <span id="3d-image-gallery">**3D Image Gallery**</span> - Interactive 3D gallery for images (image-gallery.html)
-4. 🏎️ <span id="3d-sports-car">**3D Sports Car**</span> - Interactive 3D sports car model viewer (3d-sportscar.html)
-5. 🚙 <span id="3d-jeep">**3D Jeep**</span> - Interactive 3D jeep model viewer (3d-jeep.html)
-6. 🎬 <span id="keyframe-animation">**Keyframe Animation**</span> - Animation example using keyframes (keyframe-animation.html)
-7. 🌟 <span id="project-3-animation">**Project 3 Animation**</span> - Custom animation showcase (project3-animation.html)
-8. 🗼 <span id="tokyo-animation">**Tokyo Animation**</span> - Tokyo-themed animation (tokyo-animation.html)
-9. 🇵🇭 <span id="philippines-animation">**Philippines Animation**</span> - Philippines-themed animation (philippines-animation.html)
-10. 🗺️ <span id="3d-tiles-loader">**3D Tiles Loader**</span> - 3D geographic tiles visualization (3d-tiles-loader.html)
-11. 🚗 <span id="car-materials">**Car Materials**</span> - Ferrari car with customizable materials (car-materials.html)
-12. 🌋 <span id="lava-shader">**Lava Shader**</span> - Interactive lava shader with multiple modes (lava-shader.html)
-    - Features standard, crystal, and moon turbulence modes
-    - Multiple themes: Lava, Toxic, Ocean, Moon, Inferno, Electric, Emerald, Sunset, Desert, Arctic
-    - Various 3D geometries to apply the shader to
-    - Customizable parameters for the shader effects
+### Lighting
+* Ambient light for general illumination
+* Point light at the Sun to cast realistic shadows
 
-## Getting Started
+### Detailed Planet Creation
+* Accurate size scaling for better visualization
+* Realistic textures and bump maps
+* Special materials including clouds and atmospheres for Earth
+* Moon systems for planets that have them
 
-### Prerequisites
+### Realistic Orbits and Rotations
+* Planets and moons orbit and rotate correctly
+* Proper scaled distances and speeds
+* Accurate axial tilts
 
-- Node.js installed on your system
+### Asteroid Belts
+* Main asteroid belt between Mars and Jupiter
+* Kuiper belt beyond Neptune
 
-### Installation
+## How to Use
 
-1. Clone this repository
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/3d-solar-system.git
+   ```
+
 2. Install dependencies:
-```
-npm install
-```
+   ```
+   npm install
+   ```
 
-### Running the Server
+3. Start the server:
+   ```
+   npm start
+   ```
 
-Start the local development server:
-```
-node server.js
-```
-
-The server will start at `http://localhost:3000/`. You can access any of the demos by navigating to their respective URLs.
+4. Open your browser and go to:
+   ```
+   http://localhost:3000
+   ```
 
 ## Controls
 
-Most demos feature interactive controls:
-- Mouse drag to rotate
-- Scroll to zoom
-- Right-click drag to pan
+- **Mouse Drag**: Rotate the view
+- **Scroll**: Zoom in/out
+- **Space**: Toggle auto-rotation
+- **R**: Reset camera position
+- **P**: Toggle planet labels
+- **Click on a planet**: Show information and zoom in
 
-The Lava Shader demo includes additional controls:
-- Number keys 1-3 to change turbulence modes
-- Press T to cycle through themes
-- Number keys 4-0 to select specific themes
-- R to reset camera view
+## Texture Resources
 
-## Adding Images
+This project requires texture files for all celestial bodies. You'll need to add these to the `assets/textures` directory. Recommended sources:
 
-To add images for the Image Gallery demo, place them in the `images/` directory.
+- [NASA Solar System Exploration](https://solarsystem.nasa.gov/resources/)
+- [Solar System Scope Textures](https://www.solarsystemscope.com/textures/)
+- [Planet Pixel Emporium](http://planetpixelemporium.com/planets.html)
 
-## Technologies
+## License
 
-- Three.js
-- JavaScript
-- HTML5
-- CSS3
-- Node.js
+This project is licensed under the MIT License.
+
+---
+
+This project was created as a replication of the solar system simulation at https://w21030911.nuwebspace.co.uk/graphics/assessment/

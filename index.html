@@ -3,156 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Re-Animation with Three.js</title>
+    <title>3D Solar System</title>
     <style>
         body {
             margin: 0;
             overflow: hidden;
             background-color: #000;
             font-family: Arial, sans-serif;
+            color: #fff;
         }
-        canvas {
-            display: block;
-        }
-        .fallback {
-            position: absolute;
+        
+        #loading {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: white;
-            background-color: #000;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
+        }
+        
+        #loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #ff9900;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        #controls-info {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
             z-index: 100;
         }
-        .fallback.hidden {
+        
+        #controls-info p {
+            margin: 5px 0;
+        }
+        
+        .shortcut {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-right: 5px;
+            color: #ff9900;
+        }
+        
+        #fps-counter {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            z-index: 100;
+        }
+        
+        #planet-info {
+            position: fixed;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 200;
+            max-width: 300px;
             display: none;
         }
-        .fallback h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
+        
+        #planet-info h2 {
+            color: #ff9900;
+            margin-top: 0;
         }
-        .fallback p {
-            font-size: 16px;
-            margin-bottom: 20px;
-            max-width: 600px;
-            text-align: center;
-            line-height: 1.5;
-        }
-        .loading {
-            font-size: 18px;
-            margin-top: 20px;
-        }
-        .error {
-            color: red;
-            font-weight: bold;
-            padding: 15px;
-            border: 1px solid red;
+        
+        #planet-info button {
+            background-color: #ff9900;
+            color: #000;
+            border: none;
+            padding: 8px 15px;
             border-radius: 5px;
-            background-color: rgba(255, 0, 0, 0.1);
-            margin-top: 20px;
-            max-width: 80%;
-            text-align: center;
+            cursor: pointer;
+            margin-top: 15px;
         }
-        .debug-info {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: monospace;
-            font-size: 12px;
-            z-index: 1000;
+        
+        #planet-info button:hover {
+            background-color: #ffaa22;
+        }
+        
+        .time-control {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .time-control label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        #time-scale {
+            width: 100%;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.2);
+            height: 8px;
+            border-radius: 4px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        #time-scale::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #ff9900;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        #time-scale::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #ff9900;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
         }
     </style>
 </head>
 <body>
-    <div id="fallback" class="fallback">
-        <h1>Image Re-Animation with Three.js</h1>
-        <p>Loading animation... If nothing appears within a few seconds, your browser might not support WebGL or there might be an issue with the application.</p>
-        <div id="loading" class="loading">Loading resources...</div>
-        <div id="error" class="error hidden"></div>
+    <div id="loading">
+        <div class="spinner"></div>
+        <div>
+            <h2>Loading 3D Solar System</h2>
+            <p id="loading-progress">0%</p>
+        </div>
     </div>
     
-    <div id="debug-info" class="debug-info" style="display: none;">
-        <div>Debug Info:</div>
-        <div id="debug-content"></div>
+    <div id="fps-counter">FPS: --</div>
+    
+    <div id="controls-info">
+        <p><span class="shortcut">Mouse</span> Rotate the view</p>
+        <p><span class="shortcut">Scroll</span> Zoom in/out</p>
+        <p><span class="shortcut">Space</span> Toggle auto-rotation</p>
+        <p><span class="shortcut">R</span> Reset camera position</p>
+        <p><span class="shortcut">P</span> Toggle planet labels</p>
+        
+        <div style="margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255, 255, 255, 0.2);">
+            <p style="margin-bottom: 5px;">Rotation Speed: <span id="rotation-speed-value">1x</span></p>
+            <input type="range" id="rotation-speed" min="0.1" max="100" step="0.1" value="1" style="width: 100%; height: 8px; background: rgba(255, 255, 255, 0.2); border-radius: 4px;">
+        </div>
     </div>
     
-    <script>
-        // Show debug info
-        function toggleDebug() {
-            const debugInfo = document.getElementById('debug-info');
-            debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
-        }
-        
-        // Function to show errors
-        function showError(message) {
-            const errorElement = document.getElementById('error');
-            errorElement.textContent = message;
-            errorElement.classList.remove('hidden');
-            document.getElementById('loading').classList.add('hidden');
-        }
-        
-        // Function to update debug info
-        function updateDebugInfo() {
-            const debugContent = document.getElementById('debug-content');
-            if (debugContent) {
-                debugContent.innerHTML = 
-                    'Screen Size: ' + window.innerWidth + 'x' + window.innerHeight + '<br>' +
-                    'User Agent: ' + navigator.userAgent.substring(0, 50) + '...<br>' +
-                    'WebGL Enabled: ' + (!!window.WebGLRenderingContext && !!document.createElement('canvas').getContext('webgl')) + '<br>' +
-                    'Time: ' + new Date().toLocaleTimeString();
-            }
-            setTimeout(updateDebugInfo, 1000);
-        }
-        
-        // Add keyboard shortcut for debug
-        document.addEventListener('keydown', function(event) {
-            // Press D key to toggle debug info
-            if (event.key === 'd' || event.key === 'D') {
-                toggleDebug();
-            }
-        });
-        
-        // Start updating debug info
-        updateDebugInfo();
-        
-        // Add window error handling
-        window.addEventListener('error', function(event) {
-            showError('JavaScript Error: ' + event.message);
-            console.error('Error:', event.message);
-            return false;
-        });
-    </script>
+    <div id="planet-info">
+        <h2 id="planet-name">Planet Name</h2>
+        <div id="planet-description">Information about the selected planet will appear here.</div>
+        <button id="close-info">Close</button>
+    </div>
     
     <script type="importmap">
         {
             "imports": {
-                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+                "three": "https://unpkg.com/three@0.152.2/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.152.2/examples/jsm/"
             }
         }
     </script>
-    
-    <script type="module">
-        // Hide fallback when Three.js is loaded
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                // Hide fallback screen after a moment to allow canvas to render
-                const fallback = document.getElementById('fallback');
-                if (fallback) {
-                    fallback.classList.add('hidden');
-                }
-            }, 1000);
-        });
-    </script>
-    
-    <script type="module" src="./js/main.js"></script>
+    <script src="js/rotation-control.js"></script>
+    <script type="module" src="js/main.js"></script>
 </body>
 </html> 

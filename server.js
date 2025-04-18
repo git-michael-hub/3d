@@ -15,6 +15,7 @@ const mimeTypes = {
     '.jpeg': 'image/jpeg',
     '.gif': 'image/gif',
     '.svg': 'image/svg+xml',
+    '.webp': 'image/webp',
 };
 
 // Function to get all image files from the images directory
@@ -90,21 +91,13 @@ const server = http.createServer((req, res) => {
 server.listen(PORT, () => {
     console.clear();
     console.log('='.repeat(50));
-    console.log(`🚀 Three.js Image Re-Animation Server`);
+    console.log(`🪐 3D Solar System Server`);
     console.log('='.repeat(50));
     console.log(`Server running at http://localhost:${PORT}/`);
-    console.log(`\nOpen one of these URLs in your browser:`);
-    console.log(`🌊 Wave Effect:     http://localhost:${PORT}/index.html`);
-    console.log(`✌️ 3D Sports Car:   http://localhost:${PORT}/3d-sportscar.html`);
-    console.log(`🚙 3D Jeep:         http://localhost:${PORT}/3d-jeep.html`);
-    console.log(`🌟 Particle Effects: http://localhost:${PORT}/particle-animation.html`);
-    console.log(`📸 Image Gallery:   http://localhost:${PORT}/image-gallery.html`);
-    console.log(`🏙️ 3D Tiles:        http://localhost:${PORT}/3d-tiles.html`);
-    console.log(`🚏 Project 2:       http://localhost:${PORT}/keyframe-animation.html`);
-    console.log(`🤖 Project 3:       http://localhost:${PORT}/project3-animation.html`);
-    console.log(`🌋 Project 8:       http://localhost:${PORT}/lava-shader.html`);
-    console.log('--------------------------------------------------------------------------------');
-    console.log('\nMake sure you have added images to the images/ directory');
+    console.log(`\nOpen your browser and navigate to:`);
+    console.log(`🌌 3D Solar System: http://localhost:${PORT}/`);
+    console.log('='.repeat(50));
+    console.log('\nMake sure you have added the required texture files to the assets/textures directory.');
     console.log('\nPress Ctrl+C to stop the server');
     console.log('='.repeat(50));
 }); 
