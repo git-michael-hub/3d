@@ -1,90 +1,155 @@
-# 3D Solar System
+# 3D Graphics Showcase
 
-A dynamic and interactive simulation of our solar system created using THREE.js.
+A collection of interactive 3D graphics projects built with Three.js, demonstrating various techniques and capabilities in WebGL rendering.
 
-## Features
+## Project Overview
 
-### Standard Setup
-* Scene, Camera, Renderer for 3D visualization
-* Interactive controls for navigating the 3D space
-* Efficient texture loading and management
+This repository contains 12 different 3D visualization projects, each demonstrating different aspects of Three.js and WebGL capabilities. The projects range from a complete solar system simulation to specialized demonstrations of specific 3D techniques.
 
-### Postprocessing Effects
-* BloomPass for the Sun's glow
-* OutlinePass for highlighting planets on hover
-* EffectComposer for managing all effects
+## Projects
 
-### Star Background
-* Realistic starry sky with thousands of stars
-* Random positions and subtle color variations
+### 1. Solar System Simulation (index.html)
+The main project - a comprehensive solar system simulation featuring:
+- All planets with accurate relative sizes, positions, and textures
+- Realistic planetary orbits and rotations
+- Interactive controls for exploration
+- Planet information panels
+- Asteroid belts
+- Customizable rotation speed
+- Detailed postprocessing effects (bloom, outline)
 
-### Interactive Controls
-* Orbit around the solar system
-* Zoom in/out to explore planets
-* Click on planets to get detailed information
+### 2. Lava Shader (lava-shader.html)
+An advanced shader demonstration showing:
+- Custom GLSL shaders for realistic lava effect
+- Dynamic lighting and texture animation
+- Heat distortion effects
 
-### Lighting
-* Ambient light for general illumination
-* Point light at the Sun to cast realistic shadows
+### 3. Car Materials (car-materials.html)
+A showcase of different material types for 3D vehicles:
+- PBR (Physically Based Rendering) materials
+- Metallic and roughness mapping
+- Environmental reflections
+- Various surface types (paint, chrome, glass, rubber)
 
-### Detailed Planet Creation
-* Accurate size scaling for better visualization
-* Realistic textures and bump maps
-* Special materials including clouds and atmospheres for Earth
-* Moon systems for planets that have them
+### 4. 3D Tiles Loader (3d-tiles-loader.html)
+Demonstrates loading and rendering of tiled 3D content:
+- Efficient loading of large 3D datasets
+- Level of detail management
+- Optimized rendering techniques
 
-### Realistic Orbits and Rotations
-* Planets and moons orbit and rotate correctly
-* Proper scaled distances and speeds
-* Accurate axial tilts
+### 5. Philippines Animation (philippines-animation.html)
+Geographic visualization focusing on the Philippines:
+- Topographical representation
+- Custom camera paths
+- Information overlays
+- Animated elements
 
-### Asteroid Belts
-* Main asteroid belt between Mars and Jupiter
-* Kuiper belt beyond Neptune
+### 6. Tokyo Animation (tokyo-animation.html)
+Urban visualization of Tokyo:
+- Building models
+- City layout
+- Atmospheric effects
+- Day/night transitions
 
-## How to Use
+### 7. Project 3 Animation (project3-animation.html)
+Advanced animation techniques:
+- Complex object transformations
+- Animation sequencing
+- Camera movement
+- Custom timing functions
 
-1. Clone the repository:
+### 8. Keyframe Animation (keyframe-animation.html)
+Demonstration of keyframe-based animation:
+- Interpolation between key poses
+- Animation timing control
+- Multiple animation tracks
+- Blending between animations
+
+### 9. 3D Sports Car (3d-sportscar.html)
+Interactive vehicle visualization:
+- Detailed sports car model
+- Interactive camera controls
+- Realistic materials
+- Optional animation sequences
+
+### 10. 3D Jeep (3d-jeep.html)
+Off-road vehicle visualization:
+- Detailed jeep model
+- Different viewing angles
+- Component highlighting
+- Simplified materials
+
+### 11. Image Gallery (image-gallery.html)
+3D presentation of image content:
+- Interactive 3D gallery layout
+- Transition effects
+- Custom navigation controls
+- Image loading optimization
+
+### 12. Particle Animation (particle-animation.html)
+Particle system demonstration:
+- Thousands of interactive particles
+- Physics-based movement
+- Color transitions
+- Mouse interaction
+
+## Technology Stack
+
+- **Three.js**: Core 3D library for WebGL rendering
+- **JavaScript/ES6**: Core programming language
+- **Node.js**: Simple server implementation
+- **HTML5/CSS3**: Structure and styling
+
+## How to Run
+
+1. Clone this repository:
    ```
-   git clone https://github.com/yourusername/3d-solar-system.git
+   git clone https://github.com/yourusername/3d-graphics-showcase.git
    ```
 
-2. Install dependencies:
+2. Navigate to the project folder:
+   ```
+   cd 3d-graphics-showcase
+   ```
+
+3. Install dependencies:
    ```
    npm install
    ```
 
-3. Start the server:
+4. Start the server:
    ```
    npm start
    ```
 
-4. Open your browser and go to:
+5. Open your browser and go to:
    ```
    http://localhost:3000
    ```
 
-## Controls
+6. Navigate to specific projects by opening their HTML files.
 
-- **Mouse Drag**: Rotate the view
-- **Scroll**: Zoom in/out
-- **Space**: Toggle auto-rotation
-- **R**: Reset camera position
-- **P**: Toggle planet labels
-- **Click on a planet**: Show information and zoom in
+## Project Structure
 
-## Texture Resources
+- `/*.html`: Individual project pages
+- `/js/*.js`: JavaScript files corresponding to each project
+- `/assets/`: Textures and other resources
+- `/images/`: Image assets used across projects
+- `server.js`: Simple Node.js server for local development
 
-This project requires texture files for all celestial bodies. You'll need to add these to the `assets/textures` directory. Recommended sources:
+## Browser Compatibility
 
-- [NASA Solar System Exploration](https://solarsystem.nasa.gov/resources/)
-- [Solar System Scope Textures](https://www.solarsystemscope.com/textures/)
-- [Planet Pixel Emporium](http://planetpixelemporium.com/planets.html)
+These projects work best in modern browsers with WebGL support:
+- Chrome (recommended)
+- Firefox
+- Edge
+- Safari
 
 ## License
 
 This project is licensed under the MIT License.
 
----
+## Acknowledgments
 
-This project was created as a replication of the solar system simulation at https://w21030911.nuwebspace.co.uk/graphics/assessment/
+- Three.js community for documentation and examples
+- Various texture and model resources used in these projects
