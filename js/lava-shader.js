@@ -28,6 +28,12 @@ let loadingManager, loadingStatus = { loaded: 0, total: 2 };
 let lastCalledTime, fps;
 let bloomPass; // Add bloomPass as a global variable
 
+// Add smooth zooming variables
+let targetZoom = 4; // Initial target zoom distance
+let currentZoomVelocity = 0;
+const ZOOM_FRICTION = 0.9; // Higher value = less friction
+const ZOOM_RESPONSIVENESS = 0.15; // Lower value = smoother but slower response
+
 // Track loaded assets - moved here before use
 let loadedAssets = 0;
 const totalAssets = 2; // Two textures
@@ -474,6 +480,24 @@ function init() {
     controls.panSpeed = 0.8; // Controlled panning speed
     controls.minPolarAngle = 0; // Allow full vertical rotation
     controls.maxPolarAngle = Math.PI; // Allow full vertical rotation
+    
+    // Disable the built-in zooming of OrbitControls
+    controls.enableZoom = false;
+    
+    // Add custom zoom handler
+    renderer.domElement.addEventListener('wheel', function(event) {
+        event.preventDefault();
+        
+        // Normalize scroll delta and make it smaller for finer control
+        const delta = -Math.sign(event.deltaY) * 0.15;
+        
+        // Update the target zoom with constraints
+        targetZoom = Math.max(controls.minDistance, Math.min(controls.maxDistance, targetZoom - delta));
+    }, { passive: false });
+    
+    // Initialize target zoom to match camera's initial position
+    targetZoom = camera.position.z;
+    
     controls.update();
 
     // Setup UI controls
@@ -963,6 +987,7 @@ function animate() {
     // Update controls for smooth camera movement - add check for undefined
     if (controls) {
         controls.update();
+        updateZoom(); // Add smooth zoom update
     }
     
     const delta = clock.getDelta();
@@ -2199,3 +2224,23 @@ function onKeyDown(event) {
         case '0': applyTheme('emerald'); break;
     }
 } 
+
+// Function to smoothly update camera zoom
+function updateZoom() {
+    if (!controls || !camera) return;
+    
+    const zoomDiff = targetZoom - camera.position.z;
+    
+    // Only update if there's a noticeable difference
+    if (Math.abs(zoomDiff) > 0.01 || Math.abs(currentZoomVelocity) > 0.001) {
+        // Apply spring physics for smooth zooming
+        currentZoomVelocity += zoomDiff * ZOOM_RESPONSIVENESS;
+        currentZoomVelocity *= ZOOM_FRICTION;
+        
+        // Update camera position
+        camera.position.z += currentZoomVelocity;
+        
+        // Ensure we stay within bounds
+        camera.position.z = Math.max(controls.minDistance, Math.min(controls.maxDistance, camera.position.z));
+    }
+}
