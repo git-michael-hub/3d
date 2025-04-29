@@ -153,3 +153,78 @@ This project is licensed under the MIT License.
 
 - Three.js community for documentation and examples
 - Various texture and model resources used in these projects
+
+## Live Demo
+
+Visit the live demo at: [https://your-vercel-app-name.vercel.app](https://your-vercel-app-name.vercel.app)
+
+## Features
+
+### Lava Shader
+- Interactive controls for flow speed, glow intensity, and turbulence
+- Multiple geometric shapes and themes
+- Advanced visual effects including bloom and post-processing
+- Smooth camera controls with optimized zooming
+
+### Solar System
+- Accurate planetary positions and orbits
+- Interactive camera with smooth controls
+- Adjustable simulation speed
+- Detailed planet information
+
+## Development
+
+### Local Setup
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/3d-visualization.git
+   cd 3d-visualization
+   ```
+
+2. Start a local server:
+   - Using Node.js and `http-server`:
+     ```
+     npm install -g http-server
+     http-server
+     ```
+   - Or Python:
+     ```
+     python -m http.server
+     ```
+
+3. Open your browser at `http://localhost:8080`
+
+## Deployment
+
+This project is configured for automatic deployment to Vercel through GitHub integration.
+
+### Setup CI/CD
+
+1. Sign up for a [Vercel account](https://vercel.com/signup)
+2. Link your GitHub repository in the Vercel dashboard
+3. Configure the following repository secrets in GitHub:
+   - `VERCEL_TOKEN`: Your Vercel API token
+   - `VERCEL_ORG_ID`: Your Vercel organization ID
+   - `VERCEL_PROJECT_ID`: Your Vercel project ID
+
+### How it works
+
+- Pushes to `main` branch trigger production deployments
+- Pull requests generate preview deployments
+- Status checks run automatically on each commit
+
+## Technologies
+
+- Three.js for 3D rendering
+- WebGL shaders for visual effects
+- Native JavaScript for UI and interactions
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Three.js community for examples and inspiration
+- Shader inspiration from various WebGL demos
