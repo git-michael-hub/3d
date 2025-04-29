@@ -34,6 +34,10 @@ let currentZoomVelocity = 0;
 const ZOOM_FRICTION = 0.9; // Higher value = less friction
 const ZOOM_RESPONSIVENESS = 0.15; // Lower value = smoother but slower response
 
+// Panel toggle variables - ensure they're defined at global scope
+let controlsPanelVisible = true;
+let infoPanelVisible = true;
+
 // Track loaded assets - moved here before use
 let loadedAssets = 0;
 const totalAssets = 2; // Two textures
@@ -555,6 +559,11 @@ function init() {
 
     // Create stars (initially invisible)
     createStars();
+
+    // Add this line at the end of the init function
+    setupPanelToggles();
+    
+    animate();
 }
 
 // Track loaded assets
@@ -2171,50 +2180,24 @@ function createFlowerOfLifeSphere(size) {
 // Keyboard controls
 function onKeyDown(event) {
     switch(event.key) {
-        case '1':
-            // Standard mode
-            uniforms.turbulenceMode.value = 0;
-            document.getElementById('standard-mode').classList.add('active');
-            document.getElementById('crystal-mode').classList.remove('active');
-            document.getElementById('moon-mode').classList.remove('active');
+        case '1': 
+            document.getElementById('standard-mode').click();
             break;
-        case '2':
-            // Crystal mode
-            uniforms.turbulenceMode.value = 1;
-            document.getElementById('standard-mode').classList.remove('active');
-            document.getElementById('crystal-mode').classList.add('active');
-            document.getElementById('moon-mode').classList.remove('active');
+        case '2': 
+            document.getElementById('crystal-mode').click();
             break;
-        case '3':
-            // Moon mode
-            uniforms.turbulenceMode.value = 2;
-            document.getElementById('standard-mode').classList.remove('active');
-            document.getElementById('crystal-mode').classList.remove('active');
-            document.getElementById('moon-mode').classList.add('active');
-            break;
-        case 'r':
-        case 'R':
-            // Reset camera
-            camera.position.set(0, 0, 4);
-            camera.lookAt(0, 0, 0);
-            controls.reset();
+        case '3': 
+            document.getElementById('moon-mode').click();
             break;
         case 't':
         case 'T':
             // Cycle through themes
-            const themeNames = Object.keys(themes);
-            const currentIndex = themeNames.indexOf(currentTheme);
-            const nextIndex = (currentIndex + 1) % themeNames.length;
-            const nextTheme = themeNames[nextIndex];
-            applyTheme(nextTheme);
-            
-            // Update the theme select dropdown
             const themeSelect = document.getElementById('theme-select');
-            if (themeSelect) {
-                themeSelect.value = nextTheme;
-            }
+            const currentIndex = themeSelect.selectedIndex;
+            const nextIndex = (currentIndex + 1) % themeSelect.options.length;
+            themeSelect.selectedIndex = nextIndex;
+            themeSelect.dispatchEvent(new Event('change'));
             break;
-        // Direct theme keys
         case '4': applyTheme('lava'); break;
         case '5': applyTheme('toxic'); break;
         case '6': applyTheme('ocean'); break;
@@ -2222,6 +2205,11 @@ function onKeyDown(event) {
         case '8': applyTheme('inferno'); break;
         case '9': applyTheme('electric'); break;
         case '0': applyTheme('emerald'); break;
+        case 'r':
+        case 'R':
+            resetCamera();
+            break;
+        // H key is now handled in setupPanelToggles function
     }
 } 
 
@@ -2243,4 +2231,55 @@ function updateZoom() {
         // Ensure we stay within bounds
         camera.position.z = Math.max(controls.minDistance, Math.min(controls.maxDistance, camera.position.z));
     }
+}
+
+// Add this function at the end of the file
+function setupPanelToggles() {
+    // Get panel elements
+    const controlsPanel = document.getElementById('controls-panel');
+    const infoPanel = document.getElementById('controls-info');
+    const toggleControlsBtn = document.getElementById('toggle-controls-panel');
+    const toggleInfoBtn = document.getElementById('toggle-info-panel');
+    
+    if (!controlsPanel || !infoPanel || !toggleControlsBtn || !toggleInfoBtn) {
+        console.error('Could not find all required panel elements');
+        return;
+    }
+    
+    // Set up controls panel toggle
+    toggleControlsBtn.addEventListener('click', () => {
+        controlsPanelVisible = !controlsPanelVisible;
+        controlsPanel.classList.toggle('hidden', !controlsPanelVisible);
+        toggleControlsBtn.textContent = controlsPanelVisible ? 'Hide Controls' : 'Show Controls';
+        toggleControlsBtn.classList.toggle('panel-hidden', !controlsPanelVisible);
+    });
+    
+    // Set up info panel toggle
+    toggleInfoBtn.addEventListener('click', () => {
+        infoPanelVisible = !infoPanelVisible;
+        infoPanel.classList.toggle('hidden', !infoPanelVisible);
+        toggleInfoBtn.textContent = infoPanelVisible ? 'Hide Info' : 'Show Info';
+        toggleInfoBtn.classList.toggle('panel-hidden', !infoPanelVisible);
+    });
+    
+    // Add keyboard shortcut for toggling both panels
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'h' || event.key === 'H') {
+            // Toggle both panels
+            controlsPanelVisible = !controlsPanelVisible;
+            infoPanelVisible = !infoPanelVisible;
+            
+            // Update controls panel
+            controlsPanel.classList.toggle('hidden', !controlsPanelVisible);
+            toggleControlsBtn.textContent = controlsPanelVisible ? 'Hide Controls' : 'Show Controls';
+            toggleControlsBtn.classList.toggle('panel-hidden', !controlsPanelVisible);
+            
+            // Update info panel
+            infoPanel.classList.toggle('hidden', !infoPanelVisible);
+            toggleInfoBtn.textContent = infoPanelVisible ? 'Hide Info' : 'Show Info';
+            toggleInfoBtn.classList.toggle('panel-hidden', !infoPanelVisible);
+        }
+    });
+    
+    console.log('Panel toggles initialized successfully');
 }
