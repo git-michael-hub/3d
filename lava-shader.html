@@ -43,14 +43,14 @@
             100% { transform: rotate(360deg); }
         }
 
-        #title-container {
+        #title-container, .title-container {
             position: absolute;
             top: 20px;
             left: 20px;
             z-index: 100;
         }
 
-        #title {
+        #title, .title {
             font-size: 24px;
             font-weight: bold;
             margin: 0;
@@ -58,7 +58,7 @@
             text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
         }
 
-        #subtitle {
+        #subtitle, .subtitle {
             font-size: 14px;
             margin: 5px 0 0 0;
             opacity: 0.7;
@@ -112,6 +112,15 @@
             border-radius: 50%;
             background: #ff6600;
             cursor: pointer;
+        }
+        
+        .slider-container input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #ff6600;
+            cursor: pointer;
+            border: none;
         }
 
         .toggle-container {
@@ -211,25 +220,12 @@
 
         /* Styles for toggle buttons */
         .toggle-panel-btn {
-            position: absolute;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #ff6600;
-            border: none;
-            border-radius: 4px;
-            padding: 8px 12px;
-            cursor: pointer;
-            font-size: 14px;
-            z-index: 101;
-            transition: background-color 0.2s;
-        }
-
-        .toggle-panel-btn:hover {
-            background-color: rgba(50, 50, 50, 0.7);
+            display: none;
         }
 
         #toggle-controls-panel {
             top: 20px;
-            right: 280px;
+            right: 300px;
         }
 
         #toggle-info-panel {
@@ -245,6 +241,194 @@
         #toggle-info-panel.panel-hidden {
             right: 20px;
         }
+        
+        /* Mobile top menu bar */
+        #mobile-menu {
+            display: none; /* Hidden by default on desktop */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 10px 0;
+            z-index: 200;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mobile-menu-btn {
+            background-color: transparent;
+            border: none;
+            color: #ff6600;
+            font-size: 16px;
+            padding: 8px 12px;
+            margin-right: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .mobile-menu-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+        
+        .mobile-menu-btn.active {
+            background-color: rgba(255, 102, 0, 0.2);
+        }
+        
+        /* Desktop layout */
+        @media screen and (min-width: 769px) {
+            #mobile-menu {
+                display: none !important; /* Force hide on mobile menu on desktop */
+            }
+            
+            #desktop-title {
+                display: block; /* Show desktop title */
+            }
+        }
+        
+        /* Mobile-specific styles - Media queries for responsiveness */
+        @media screen and (max-width: 768px) {
+            /* Hide desktop title on mobile */
+            #desktop-title {
+                display: none;
+            }
+            
+            /* Title in mobile menu */
+            #title-container {
+                position: static;
+                margin-left: 15px;
+                margin-top: 0;
+                margin-bottom: 0;
+                flex-grow: 1;
+            }
+            
+            #title {
+                font-size: 20px;
+            }
+            
+            #subtitle {
+                font-size: 12px;
+                margin: 0;
+            }
+            
+            /* Show mobile menu */
+            #mobile-menu {
+                display: flex;
+            }
+            
+            /* Panels need to start below the menu */
+            .panel {
+                margin-top: 60px;
+            }
+            
+            /* Stack panels on mobile */
+            .panel {
+                position: fixed;
+                width: 80%;
+                max-width: 300px;
+                max-height: 70%;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+                z-index: 150;
+            }
+            
+            /* Stack panels on mobile */
+            #controls-panel {
+                top: 50%;
+                right: -100%; /* Start completely off-screen */
+                transform: translateY(-50%);
+                transition: right 0.3s ease;
+            }
+            
+            /* This is the critical style for showing the panel */
+            #controls-panel.mobile-visible {
+                right: 0 !important; /* Force it to override any inline styles */
+            }
+            
+            /* Adjust slider sizes for mobile */
+            .slider-container input[type="range"] {
+                height: 12px; /* Larger for touch */
+            }
+            
+            .slider-container input[type="range"]::-webkit-slider-thumb {
+                width: 22px;
+                height: 22px;
+            }
+            
+            .slider-container input[type="range"]::-moz-range-thumb {
+                width: 22px;
+                height: 22px;
+            }
+            
+            /* Make select dropdown more touch-friendly */
+            .select-container select {
+                padding: 10px;
+                font-size: 16px; /* iOS form zooming prevention */
+            }
+            
+            /* Larger buttons for touch */
+            .mode-button {
+                padding: 10px;
+                font-size: 14px;
+            }
+            
+            /* Adjust FPS counter */
+            #fps-counter {
+                bottom: 10px;
+                left: 10px;
+            }
+            
+            /* Adjust FPS counter */
+            #controls-info {
+                bottom: 70px;
+                right: -100%; /* Start completely off-screen */
+                transition: right 0.3s ease;
+                font-size: 13px;
+            }
+            
+            /* This is the critical style for showing the panel */
+            #controls-info.mobile-visible {
+                right: 0 !important; /* Force it to override any inline styles */
+            }
+        }
+        
+        /* Small phone screens */
+        @media screen and (max-width: 480px) {
+            #title-container {
+                top: 55px;
+                left: 10px;
+            }
+            
+            #title {
+                font-size: 18px;
+            }
+            
+            #subtitle {
+                font-size: 11px;
+            }
+            
+            .panel {
+                width: 85%;
+                padding: 12px;
+            }
+            
+            /* Convert button groups to vertical on very small screens */
+            .button-group {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            /* Mobile menu adjustments */
+            .mobile-menu-btn {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -254,17 +438,26 @@
         <p>Initializing Lava Shader...</p>
     </div>
 
-    <!-- Title -->
-    <div id="title-container">
-        <h1 id="title">Lava Shader</h1>
-        <p id="subtitle">Interactive Three.js shader demo</p>
+    <!-- Desktop title container - shown only on desktop -->
+    <div id="desktop-title" class="title-container">
+        <h1 id="desktop-title-text" class="title">Lava Shader</h1>
+        <p id="desktop-subtitle" class="subtitle">Interactive Three.js shader demo</p>
     </div>
 
-    <!-- Toggle Buttons -->
-    <button id="toggle-controls-panel" class="toggle-panel-btn">Hide Controls</button>
-    <button id="toggle-info-panel" class="toggle-panel-btn">Hide Info</button>
+    <!-- Mobile Menu Bar with Title inside -->
+    <div id="mobile-menu">
+        <!-- Title container inside mobile menu - will be positioned by CSS on mobile -->
+        <div id="title-container">
+            <h1 id="title">Lava Shader</h1>
+            <p id="subtitle">Interactive Three.js shader demo</p>
+        </div>
+        <button id="mobile-controls-btn" class="mobile-menu-btn">
+            <svg viewBox="0 0 24 24"><path d="M3 17h18v-2H3v2zm0-4h18v-2H3v2zm0-4h18V7H3v2z"/></svg>
+            Controls
+        </button>
+    </div>
 
-    <!-- Controls Panel -->
+    <!-- Controls Panel - No toggle buttons for desktop -->
     <div id="controls-panel" class="panel">
         <div class="select-container">
             <label for="geometry-select">Geometry:</label>
@@ -359,8 +552,8 @@
     <!-- FPS Counter -->
     <div id="fps-counter">FPS: 0</div>
 
-    <!-- Controls Info -->
-    <div id="controls-info" class="panel">
+    <!-- Controls Info - still exists but is permanently hidden -->
+    <div id="controls-info" class="panel hidden" style="display: none;">
         <p><kbd>Left Click + Drag</kbd> - Rotate view</p>
         <p><kbd>Mouse Wheel</kbd> - Zoom in/out</p>
         <p><kbd>Right Click + Drag</kbd> - Pan view</p>
@@ -371,6 +564,7 @@
         <p><kbd>4-0</kbd> - Select specific themes</p>
         <p><kbd>R</kbd> - Reset camera</p>
         <p><kbd>H</kbd> - Toggle panels visibility</p>
+        <p><b>Mobile:</b> Pinch to zoom, drag to rotate</p>
     </div>
 
     <!-- Import maps for modules -->
@@ -385,5 +579,99 @@
 
     <!-- Main script -->
     <script type="module" src="js/lava-shader.js"></script>
+    
+    <!-- Toggle functions - defined globally so they work with inline onclick -->
+    <script>
+        // Setup on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM fully loaded");
+            setupMobilePanels();
+            adjustLayoutForScreenSize();
+        });
+        
+        // Dedicated function for mobile panel setup
+        function setupMobilePanels() {
+            console.log("Setting up mobile panels");
+            
+            // Always get fresh references to elements
+            const controlsPanel = document.getElementById('controls-panel');
+            const mobileControlsBtn = document.getElementById('mobile-controls-btn');
+            
+            // Check if we're on mobile
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            console.log("Is mobile device:", isMobile);
+            
+            if (!isMobile) {
+                console.log("Not mobile, skipping mobile setup");
+                return;
+            }
+            
+            // Mobile setup
+            console.log("Configuring mobile UI");
+            
+            // Clear any interfering styles and classes
+            controlsPanel.removeAttribute('style');
+            
+            // Ensure we have correct starting classes
+            controlsPanel.classList.remove('hidden');
+            controlsPanel.classList.remove('mobile-visible');
+            
+            // Clear any existing click handlers by cloning the button
+            const newControlsBtn = mobileControlsBtn.cloneNode(true);
+            mobileControlsBtn.parentNode.replaceChild(newControlsBtn, mobileControlsBtn);
+            
+            // Simple direct toggle for mobile controls
+            newControlsBtn.onclick = function() {
+                console.log("Mobile controls button clicked directly");
+                
+                // Direct toggle for controls
+                if (controlsPanel.classList.contains('mobile-visible')) {
+                    controlsPanel.classList.remove('mobile-visible');
+                    newControlsBtn.classList.remove('active');
+                } else {
+                    controlsPanel.classList.add('mobile-visible');
+                    newControlsBtn.classList.add('active');
+                }
+                
+                console.log("Controls panel state:", controlsPanel.classList.contains('mobile-visible'));
+                console.log("Controls panel classes:", controlsPanel.className);
+            };
+            
+            console.log("Mobile panel setup complete with direct handlers");
+        }
+        
+        // Handle orientation changes
+        window.addEventListener('orientationchange', function() {
+            console.log("Orientation changed");
+            setTimeout(function() {
+                setupMobilePanels(); // Re-setup panels after orientation change
+                console.log("Re-initialized after orientation change");
+            }, 300);
+        });
+        
+        // On window resize, check if we need to adjust layout
+        window.addEventListener('resize', function() {
+            adjustLayoutForScreenSize();
+        });
+        
+        // Adjust layout based on screen size
+        function adjustLayoutForScreenSize() {
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            const controlsPanel = document.getElementById('controls-panel');
+            
+            if (isMobile) {
+                // Mobile: panel starts hidden
+                controlsPanel.classList.remove('hidden'); // Remove desktop hiding
+                controlsPanel.classList.remove('mobile-visible'); // Start not visible
+            } else {
+                // Desktop: ensure panel is always visible
+                controlsPanel.classList.remove('hidden'); 
+                controlsPanel.classList.remove('mobile-visible');
+                // Make sure the panel is positioned correctly for desktop
+                controlsPanel.style.right = '20px';
+                controlsPanel.style.transform = 'none';
+            }
+        }
+    </script>
 </body>
 </html> 
